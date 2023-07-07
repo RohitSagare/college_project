@@ -51,6 +51,8 @@
       color: #a9c2eb;
     }
     </style>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>
 </head>
 
 <body>
@@ -67,6 +69,22 @@
     <a href="#" class="menu-item">Hospital Report</a>
     <a href="#" class="menu-item">Hospital Predictions</a>
   </div>
+
+  <!-- Dropdown as input type -->
+<div class="container-fluid">
+    <form action="{{url_for('showHospitalReport')}}" method="post">
+        <div class="form-group mt-4">
+            <label for="hospitalDropdown">Select Hospital:</label>
+            <select class="form-control" id="hospitalDropdown" name="hospital">
+                {%for data in data %}
+                <option value="{{data[0]}}",name="hospital">{{data[0]}}</option>
+                {%endfor%}
+                <!-- Add more hospitals as needed -->
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
   {% for file_path in file_paths %}
     {% if '_1' in file_path %}
     <br>

@@ -50,6 +50,16 @@
     .menu-item:hover {
       color: #a9c2eb;
     }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
     </style>
 </head>
 
@@ -67,7 +77,20 @@
     <a href="#" class="menu-item">Hospital Report</a>
     <a href="#" class="menu-item">Hospital Predictions</a>
   </div>
-
+  
+  <h1>Predictions</h1>
+  <table>
+    <tr>
+      <th>Patient Name</th>
+      <th>Thyroid Type</th>
+    </tr>
+    {%for data in data %}
+    <tr>
+      <td>{{ data[0] }}</td>
+      <td>{{ data[1] }}</td>
+    </tr>
+    {% endfor %}
+  </table>
 </body>
 
 </html>

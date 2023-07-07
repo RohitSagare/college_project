@@ -50,6 +50,16 @@
     .menu-item:hover {
       color: #a9c2eb;
     }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      padding: 8px;
+      text-align: left;
+      border-bottom: 1px solid #ddd;
+    }
     </style>
 </head>
 
@@ -67,34 +77,35 @@
     <a href="#" class="menu-item">Hospital Report</a>
     <a href="#" class="menu-item">Hospital Predictions</a>
   </div>
-  {% for file_path in file_paths %}
-    {% if '_1' in file_path %}
-    <br>
-    <h3><b>This graph shows gender wise type of thyroid diseases these patients have</b></h3>
-    {%endif%}
-    {% if '_2' in file_path %}
-    <br>
-    <h3><b>This graph shows how many pregnant patients have what kind of thyroid diseases</b></h3>
-    {%endif%}
-    {% if '_3' in file_path %}
-    <br>
-    <h3><b>This graph shows what kind of diseases required thyroid surgery</b></h3>
-    {%endif%}
-    {% if '_4' in file_path %}
-    <br>
-    <h3><b>This graph shows what kind of diseases had tumor</b></h3>
-    {%endif%}
-    {% if '_5' in file_path %}
-    <br>
-    <h3><b> Number of thyroid surgeries</b></h3>
-    {%endif%}
-    {% if '_6' in file_path %}
-    <br>
-    <h3><b> Number of thyroid disease types</b></h3>
-    {%endif%}
-    <img src="{{ url_for('static', filename=file_path) }}" alt="Image">
-
+  
+   <!-- Dropdown as input type -->
+<div class="container-fluid">
+    <form action="{{url_for('showHospitalPredictions')}}" method="post">
+        <div class="form-group mt-4">
+            <label for="hospitalDropdown">Select Hospital:</label>
+            <select class="form-control" id="hospitalDropdown" name="hospital">
+                {%for data in data %}
+                <option value="{{data[0]}}",name="hospital">{{data[0]}}</option>
+                {%endfor%}
+                <!-- Add more hospitals as needed -->
+            </select>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+  <h1>Predictions</h1>
+  <table>
+    <tr>
+      <th>Patient Name</th>
+      <th>Thyroid Type</th>
+    </tr>
+    {%for data in data %}
+    <tr>
+      <td>{{ data[0] }}</td>
+      <td>{{ data[1] }}</td>
+    </tr>
     {% endfor %}
+  </table>
 </body>
 
 </html>
