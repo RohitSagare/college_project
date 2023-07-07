@@ -272,7 +272,7 @@ def showReport():
 @app.route('/showPredictions')
 def showPredictions():
     try:
-        sql_query = "SELECT patient_name,thyroid_type FROM thyroid_predictions WHERE hospital =%s"
+        sql_query = "SELECT patient_name,thyroid_type FROM thyroid_prediction WHERE hospital =%s"
         cursor = mysql.connection.cursor()
         cursor.execute(sql_query, (str(hospital[-1]),))
         prediction_data = cursor.fetchall()
@@ -285,6 +285,71 @@ def showPredictions():
         return render_template('predictions.html')
     return render_template('predictions.html',data=prediction_data)
 
+
+@app.route('/hospitalReport')
+def hospitalReport():
+    try:
+        sql_query = "SELECT hospital_name FROM thyroid_reports"
+        cursor = mysql.connection.cursor()
+        cursor.execute(sql_query)
+        hospitals = cursor.fetchall()
+        mysql.connection.commit()
+        cursor.close()
+    except Exception as e:
+        print('300')
+        print(e)
+    return render_template('hospitalReport.html',data=set(hospitals))    
+
+
+@app.route('/showHospitalReport',methods=['POST'])
+def showHospitalReport():
+    if request.method =='POST':
+        try:
+            sql_query = "SELECT hospital_name FROM thyroid_reports"
+            cursor = mysql.connection.cursor()
+            cursor.execute(sql_query)
+            hospital_data = cursor.fetchall()
+            mysql.connection.commit()
+            cursor.close()
+            hospitals = set(hospital_data)
+            filePath=[]
+            for i in range(1,7):
+                filePath.append(str(request.form.get('hospital'))+'_'+str(i)+'.png')
+        except Exception as e:
+            print('300')
+            print(e)
+        return render_template('hospitalReport.html',data=hospitals,file_paths=filePath)
+
+
+@app.route('/hospitalPredictions',methods=['GET'])
+def hospitalPredictions():
+    try:
+        sql_query = "SELECT hospital_name FROM thyroid_reports"
+        cursor = mysql.connection.cursor()
+        cursor.execute(sql_query)
+        hospitals = cursor.fetchall()
+        mysql.connection.commit()
+        cursor.close()
+    except Exception as e:
+        print('300')
+        print(e)
+    return render_template('hospital_predictions.html',data=set(hospitals))
+
+
+@app.route('/showHospitalPredictions',methods=['POST'])
+def showHospitalPredictions():
+    if request.method =='POST':
+        try:
+            sql_query = "SELECT patient_name,thyroid_type FROM thyroid_prediction WHERE hospital =%s"
+            cursor = mysql.connection.cursor()
+            cursor.execute(sql_query, (str(request.form.get('hospital')),))
+            prediction_data = cursor.fetchall()
+            mysql.connection.commit()
+            cursor.close()
+        except Exception as e:
+            print('282')
+            print(e)
+    return render_template('hospital_predictions.html',data=prediction_data)
 
 if __name__=="__main__":
     app.run(host='0.0.0.0',debug=True)
